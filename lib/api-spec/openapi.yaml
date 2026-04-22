@@ -1,0 +1,602 @@
+openapi: 3.1.0
+info:
+  # Do not change the title, if the title changes, the import paths will be broken
+  title: Api
+  version: 0.1.0
+  description: AI Money Blog API
+servers:
+  - url: /api
+    description: Base API path
+tags:
+  - name: health
+  - name: posts
+  - name: categories
+  - name: resources
+  - name: newsletter
+  - name: ai
+  - name: stats
+paths:
+  /healthz:
+    get:
+      operationId: healthCheck
+      tags: [health]
+      summary: Health check
+      responses:
+        "200":
+          description: Healthy
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/HealthStatus"
+
+  /stats:
+    get:
+      operationId: getStats
+      tags: [stats]
+      summary: Site overview stats
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteStats"
+
+  /categories:
+    get:
+      operationId: listCategories
+      tags: [categories]
+      summary: List all categories
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Category"
+
+  /categories/{slug}:
+    get:
+      operationId: getCategory
+      tags: [categories]
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Category"
+
+  /posts:
+    get:
+      operationId: listPosts
+      tags: [posts]
+      summary: List blog posts with filters
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: Category slug
+        - in: query
+          name: difficulty
+          schema:
+            type: string
+            enum: [beginner, intermediate, advanced]
+        - in: query
+          name: incomeType
+          schema:
+            type: string
+            enum: [passive, active, hybrid]
+        - in: query
+          name: tag
+          schema:
+            type: string
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: premium
+          schema:
+            type: boolean
+        - in: query
+          name: sort
+          schema:
+            type: string
+            enum: [recent, popular, trending]
+            default: recent
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+            maximum: 50
+        - in: query
+          name: offset
+          schema:
+            type: integer
+            default: 0
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostList"
+
+  /posts/trending:
+    get:
+      operationId: listTrendingPosts
+      tags: [posts]
+      summary: Trending posts (last 7 days by views)
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 6
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PostSummary"
+
+  /posts/featured:
+    get:
+      operationId: listFeaturedPosts
+      tags: [posts]
+      summary: Editorial featured posts
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PostSummary"
+
+  /posts/{slug}:
+    get:
+      operationId: getPost
+      tags: [posts]
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Post"
+
+  /posts/{slug}/view:
+    post:
+      operationId: trackPostView
+      tags: [posts]
+      summary: Increment a post's view counter
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountResponse"
+
+  /posts/{slug}/like:
+    post:
+      operationId: likePost
+      tags: [posts]
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CountResponse"
+
+  /posts/{slug}/related:
+    get:
+      operationId: listRelatedPosts
+      tags: [posts]
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/PostSummary"
+
+  /posts/{slug}/summary:
+    get:
+      operationId: getPostSummary
+      tags: [ai]
+      summary: AI generated TL;DR of a blog post
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PostSummaryAi"
+
+  /ai/chat:
+    post:
+      operationId: aiChat
+      tags: [ai]
+      summary: Ask the "How can I earn with AI?" assistant
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChatResponse"
+
+  /resources:
+    get:
+      operationId: listResources
+      tags: [resources]
+      parameters:
+        - in: query
+          name: category
+          schema:
+            type: string
+        - in: query
+          name: pricing
+          schema:
+            type: string
+            enum: [free, freemium, paid]
+        - in: query
+          name: search
+          schema:
+            type: string
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 30
+            maximum: 60
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Resource"
+
+  /tags/popular:
+    get:
+      operationId: listPopularTags
+      tags: [posts]
+      parameters:
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 12
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/TagCount"
+
+  /newsletter/subscribe:
+    post:
+      operationId: subscribeNewsletter
+      tags: [newsletter]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewsletterRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NewsletterResponse"
+
+components:
+  schemas:
+    HealthStatus:
+      type: object
+      required: [status]
+      properties:
+        status:
+          type: string
+
+    Category:
+      type: object
+      required: [id, slug, name, description, color, icon, postCount]
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        name:
+          type: string
+        description:
+          type: string
+        color:
+          type: string
+        icon:
+          type: string
+        postCount:
+          type: integer
+
+    PostSummary:
+      type: object
+      required:
+        - id
+        - slug
+        - title
+        - excerpt
+        - coverImage
+        - category
+        - difficulty
+        - incomeType
+        - tags
+        - premium
+        - readMinutes
+        - views
+        - likes
+        - author
+        - publishedAt
+      properties:
+        id:
+          type: integer
+        slug:
+          type: string
+        title:
+          type: string
+        excerpt:
+          type: string
+        coverImage:
+          type: string
+        category:
+          $ref: "#/components/schemas/Category"
+        difficulty:
+          type: string
+          enum: [beginner, intermediate, advanced]
+        incomeType:
+          type: string
+          enum: [passive, active, hybrid]
+        tags:
+          type: array
+          items:
+            type: string
+        premium:
+          type: boolean
+        readMinutes:
+          type: integer
+        views:
+          type: integer
+        likes:
+          type: integer
+        author:
+          $ref: "#/components/schemas/Author"
+        publishedAt:
+          type: string
+          format: date-time
+
+    Post:
+      allOf:
+        - $ref: "#/components/schemas/PostSummary"
+        - type: object
+          required: [content]
+          properties:
+            content:
+              type: string
+              description: Markdown body
+
+    Author:
+      type: object
+      required: [name, role, avatar]
+      properties:
+        name:
+          type: string
+        role:
+          type: string
+        avatar:
+          type: string
+
+    PostList:
+      type: object
+      required: [items, total, limit, offset]
+      properties:
+        items:
+          type: array
+          items:
+            $ref: "#/components/schemas/PostSummary"
+        total:
+          type: integer
+        limit:
+          type: integer
+        offset:
+          type: integer
+
+    Resource:
+      type: object
+      required:
+        - id
+        - title
+        - description
+        - url
+        - category
+        - pricing
+        - tags
+        - logo
+      properties:
+        id:
+          type: integer
+        title:
+          type: string
+        description:
+          type: string
+        url:
+          type: string
+        category:
+          type: string
+        pricing:
+          type: string
+          enum: [free, freemium, paid]
+        tags:
+          type: array
+          items:
+            type: string
+        logo:
+          type: string
+
+    TagCount:
+      type: object
+      required: [tag, count]
+      properties:
+        tag:
+          type: string
+        count:
+          type: integer
+
+    SiteStats:
+      type: object
+      required:
+        - totalPosts
+        - totalCategories
+        - totalResources
+        - totalReads
+        - totalSubscribers
+      properties:
+        totalPosts:
+          type: integer
+        totalCategories:
+          type: integer
+        totalResources:
+          type: integer
+        totalReads:
+          type: integer
+        totalSubscribers:
+          type: integer
+
+    CountResponse:
+      type: object
+      required: [count]
+      properties:
+        count:
+          type: integer
+
+    PostSummaryAi:
+      type: object
+      required: [tldr, keyTakeaways]
+      properties:
+        tldr:
+          type: string
+        keyTakeaways:
+          type: array
+          items:
+            type: string
+
+    ChatRequest:
+      type: object
+      required: [message]
+      properties:
+        message:
+          type: string
+        history:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatTurn"
+
+    ChatTurn:
+      type: object
+      required: [role, content]
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+
+    ChatResponse:
+      type: object
+      required: [reply, suggestions]
+      properties:
+        reply:
+          type: string
+        suggestions:
+          type: array
+          items:
+            type: string
+
+    NewsletterRequest:
+      type: object
+      required: [email]
+      properties:
+        email:
+          type: string
+          format: email
+
+    NewsletterResponse:
+      type: object
+      required: [ok, message]
+      properties:
+        ok:
+          type: boolean
+        message:
+          type: string
