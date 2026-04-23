@@ -1,4 +1,5 @@
-const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() ?? "";
+// const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() ?? "";
+const configuredApiUrl = "https://aimoneyinfo.onrender.com";
 
 function stripTrailingSlash(value: string): string {
   return value.replace(/\/+$/, "");
