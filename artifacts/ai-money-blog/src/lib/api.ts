@@ -1,20 +1,43 @@
-// artifacts/ai-money-blog/src/lib/api.ts
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() ?? "";
 
 function stripTrailingSlash(value: string): string {
   return value.replace(/\/+$/, "");
 }
 
-export function getApiBaseUrl(): string {
-  // Production (Vercel)
-  if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
-    return "https://aimoneyinfo.onrender.com/api";
-  }
+function getConfiguredApiOrigin(): string | null {
+  if (!configuredApiUrl) return null;
 
-  // Local
-  return "http://localhost:8080/api";
+  const normalized = stripTrailingSlash(configuredApiUrl);
+
+  return normalized.endsWith("/api")
+    ? normalized.slice(0, -"/api".length)
+    : normalized;
 }
 
-// ✅ THIS IS WHAT YOUR BUILD IS MISSING
+/**
+ * ✅ FIX 1: REQUIRED EXPORT (your build error)
+ */
+export function getApiOrigin(): string | null {
+  return getConfiguredApiOrigin();
+}
+
+/**
+ * ✅ FIX 2: BASE API URL
+ */
+export function getApiBaseUrl(): string {
+  const origin = getConfiguredApiOrigin();
+
+  if (origin) {
+    return `${origin}/api`;
+  }
+
+  // fallback (local dev)
+  return `${window.location.origin}/api`;
+}
+
+/**
+ * ✅ FIX 3: REQUIRED EXPORT (your build error)
+ */
 export function buildApiUrl(path = ""): string {
   const normalizedPath = path
     ? path.startsWith("/")
@@ -22,5 +45,5 @@ export function buildApiUrl(path = ""): string {
       : `/${path}`
     : "";
 
-  return `${stripTrailingSlash(getApiBaseUrl())}${normalizedPath}`;
+  return `${getApiBaseUrl()}${normalizedPath}`;
 }
