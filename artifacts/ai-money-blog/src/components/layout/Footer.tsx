@@ -12,7 +12,7 @@ export function Footer() {
               <div className="bg-primary text-primary-foreground p-1.5 rounded-md">
                 <Sparkles className="h-5 w-5" />
               </div>
-              <span className="font-serif font-bold text-xl tracking-tight">AI Money Blog</span>
+              <span className="font-serif font-bold text-xl tracking-tight">AI Money Info</span>
             </Link>
             <p className="text-muted-foreground max-w-sm">
               A modern publication helping curious creators and solo founders discover, learn, and monetize AI tools. Turn the AI revolution into a profitable reality.
@@ -55,7 +55,7 @@ export function Footer() {
         </div>
 
         <div className="mt-12 pt-8 border-t flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} AI Money Blog. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} AI Money Info. All rights reserved.</p>
           <div className="flex gap-6">
             <Link href="/about" className="hover:text-foreground transition-colors">Privacy Policy</Link>
             <Link href="/about" className="hover:text-foreground transition-colors">Terms of Service</Link>

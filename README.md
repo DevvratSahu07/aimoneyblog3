@@ -1,4 +1,4 @@
-# AI Money Blog
+# AI Money Info
 
 A full-stack blog & resources platform focused on AI tools and monetization. It ships with:
 

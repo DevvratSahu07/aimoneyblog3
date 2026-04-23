@@ -26,7 +26,7 @@ pnpm workspace monorepo using TypeScript. Each package manages its own dependenc
 
 See the `pnpm-workspace` skill for workspace structure, TypeScript setup, and package details.
 
-## AI Money Blog (artifact)
+## AI Money Info (artifact)
 - Path: `/`, Vite + React + Wouter + TanStack Query + react-markdown.
 - Backend: `artifacts/api-server` (Express, Drizzle, Postgres) mounted at `/api`.
 - AI features (TL;DR summary, chatbot) use OpenAI via Replit AI Integration (gpt-5.2).

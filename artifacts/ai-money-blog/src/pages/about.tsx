@@ -11,7 +11,7 @@ export default function About() {
           <Sparkles className="w-8 h-8" />
         </div>
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold tracking-tight mb-6">
-          About AI Money Blog
+          About AI Money Info
         </h1>
         <p className="text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
           We help curious creators, side-hustlers, and solo founders navigate the noise and build profitable businesses with AI.
@@ -24,7 +24,7 @@ export default function About() {
         </p>
         
         <p>
-          That's why we built AI Money Blog. We believe that with the right tools and strategies, anyone can build a profitable digital business or side hustle. Our mission is to cut through the fluff and provide deep-dives, case studies, and resources that actually work.
+          That's why we built AI Money Info. We believe that with the right tools and strategies, anyone can build a profitable digital business or side hustle. Our mission is to cut through the fluff and provide deep-dives, case studies, and resources that actually work.
         </p>
 
         <h3>What you'll find here</h3>

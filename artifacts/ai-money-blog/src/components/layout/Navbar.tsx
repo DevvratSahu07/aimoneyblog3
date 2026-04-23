@@ -35,7 +35,7 @@ export function Navbar() {
             <div className="bg-primary text-primary-foreground p-1.5 rounded-md">
               <Sparkles className="h-5 w-5" />
             </div>
-            <span className="font-serif font-bold text-xl tracking-tight">AI Money Blog</span>
+            <span className="font-serif font-bold text-xl tracking-tight">AI Money Info</span>
           </Link>
           
           <nav className="hidden md:flex gap-6 items-center">
@@ -85,7 +85,7 @@ export function Navbar() {
             <SheetContent side="right" className="w-[300px] sm:w-[400px]">
               <SheetTitle className="font-serif text-lg flex items-center gap-2 mb-6">
                 <Sparkles className="h-5 w-5 text-primary" />
-                AI Money Blog
+                AI Money Info
               </SheetTitle>
               <div className="flex flex-col gap-6">
                 <form onSubmit={handleSearch} className="relative">
