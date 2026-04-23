@@ -1,20 +1,20 @@
-// src/lib/api.ts
+// artifacts/ai-money-blog/src/lib/api.ts
 
 function stripTrailingSlash(value: string): string {
   return value.replace(/\/+$/, "");
 }
 
 export function getApiBaseUrl(): string {
-  // 🔥 Production (Vercel)
+  // Production (Vercel)
   if (typeof window !== "undefined" && window.location.hostname !== "localhost") {
     return "https://aimoneyinfo.onrender.com/api";
   }
 
-  // ✅ Local
+  // Local
   return "http://localhost:8080/api";
 }
 
-// ✅ RESTORE THIS (IMPORTANT)
+// ✅ THIS IS WHAT YOUR BUILD IS MISSING
 export function buildApiUrl(path = ""): string {
   const normalizedPath = path
     ? path.startsWith("/")
