@@ -1,5 +1,6 @@
-// const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() ?? "";
-const configuredApiUrl = "https://aimoneyinfo.onrender.com";
+// src/lib/api.ts
+
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim() ?? "";
 
 function stripTrailingSlash(value: string): string {
   return value.replace(/\/+$/, "");
@@ -14,10 +15,6 @@ function getConfiguredApiOrigin(): string | null {
     : normalized;
 }
 
-export function getApiOrigin(): string | null {
-  return getConfiguredApiOrigin();
-}
-
 export function getApiBaseUrl(): string {
   const configuredOrigin = getConfiguredApiOrigin();
 
@@ -26,14 +23,4 @@ export function getApiBaseUrl(): string {
   }
 
   return `${import.meta.env.BASE_URL.replace(/\/$/, "")}/api`;
-}
-
-export function buildApiUrl(path = ""): string {
-  const normalizedPath = path
-    ? path.startsWith("/")
-      ? path
-      : `/${path}`
-    : "";
-
-  return `${getApiBaseUrl()}${normalizedPath}`;
 }

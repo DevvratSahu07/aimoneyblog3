@@ -39,19 +39,9 @@ app.use(
   })
 );
 
-/**
- * =========================
- * SECURITY + PERFORMANCE
- * =========================
- */
 app.use(helmet());
 app.use(compression());
 
-/**
- * =========================
- * LOGGING
- * =========================
- */
 app.use(
   pinoHttp({
     logger,
@@ -72,19 +62,9 @@ app.use(
   })
 );
 
-/**
- * =========================
- * BODY PARSERS
- * =========================
- */
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-/**
- * =========================
- * HEALTH CHECK ROUTE
- * =========================
- */
 app.get("/health", (_req: Request, res: Response) => {
   res.status(200).json({
     status: "ok",
@@ -93,18 +73,8 @@ app.get("/health", (_req: Request, res: Response) => {
   });
 });
 
-/**
- * =========================
- * API ROUTES
- * =========================
- */
 app.use("/api", router);
 
-/**
- * =========================
- * 404 HANDLER
- * =========================
- */
 app.use((req: Request, res: Response) => {
   res.status(404).json({
     error: "Route not found",
@@ -112,11 +82,6 @@ app.use((req: Request, res: Response) => {
   });
 });
 
-/**
- * =========================
- * GLOBAL ERROR HANDLER
- * =========================
- */
 app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   logger.error(
     {

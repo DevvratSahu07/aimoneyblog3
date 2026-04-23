@@ -24,8 +24,7 @@ export default function AdminLogin() {
     setError(null);
     setLoading(true);
     try {
-      // const res = await adminFetch<{ token: string }>("/admin/login", {
-      const res = await adminFetch<{ token: string }>("/api/admin/login", {
+      const res = await adminFetch<{ token: string }>("/admin/login", {
         method: "POST",
         body: JSON.stringify({ password }),
       });
