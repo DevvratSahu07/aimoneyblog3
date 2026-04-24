@@ -99,4 +99,8 @@ app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
   });
 });
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "OK" });
+});
+
 export default app;
